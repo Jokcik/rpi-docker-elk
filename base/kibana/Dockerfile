@@ -31,7 +31,7 @@ RUN set -x \
 ENV KIBANA_VERSION 7.10.1
 RUN set -x \
     && cd /tmp \
-    && wget "https://download.elastic.co/kibana/kibana/kibana-$KIBANA_VERSION-linux-x86_64.tar.gz" \
+    && wget "https://artifacts.elastic.co/downloads/kibana/kibana-$KIBANA_VERSION-linux-x86_64.tar.gz" \
     && tar -xvzf kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
     && mv /tmp/kibana-$KIBANA_VERSION-linux-x86_64 /opt \
     && rm kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
