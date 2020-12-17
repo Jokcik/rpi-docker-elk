@@ -33,7 +33,9 @@ RUN set -x \
     && cd /tmp \
     && wget "https://artifacts.elastic.co/downloads/kibana/kibana-$KIBANA_VERSION-linux-x86_64.tar.gz"
 
-RUN tar -xvzf kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
+RUN set -x \
+    && cd /tmp \
+    && tar -xvzf kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
     && mv /tmp/kibana-$KIBANA_VERSION-linux-x86_64 /opt \
     && rm kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
     && ln -s /opt/kibana-$KIBANA_VERSION-linux-x86_64 /opt/kibana \
