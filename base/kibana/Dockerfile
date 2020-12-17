@@ -41,40 +41,7 @@ RUN set -x \
 #    && sed -ri "s!^(\#\s*)?(elasticsearch\.url:).*!\2 'http://elasticsearch:9200'!" /opt/kibana/config/kibana.yml \
 #    && grep -q 'elasticsearch:9200' /opt/kibana/config/kibana.yml
 
-# ------------------------
-RUN cd /opt && \
-  curl --retry 8 -s -L -O https://artifacts.elastic.co/downloads/kibana/kibana-7.10.1-linux-x86_64.tar.gz && \
-  cd -
-
-
-RUN mkdir /usr/share/kibana
-WORKDIR /usr/share/kibana
-RUN tar --strip-components=1 -zxf /opt/kibana-7.10.1-linux-x86_64.tar.gz
-# Ensure that group permissions are the same as user permissions.
-# This will help when relying on GID-0 to run Kibana, rather than UID-1000.
-# OpenShift does this, for example.
-# REF: https://docs.openshift.org/latest/creating_images/guidelines.html
-RUN chmod -R g=u /usr/share/kibana
-RUN find /usr/share/kibana -type d -exec chmod g+s {} \;
-
-################################################################################
-# Build stage 1 (the actual Kibana image):
-#
-# Copy kibana from stage 0
-# Add entrypoint
-################################################################################
-FROM centos:8
-EXPOSE 5601
-
-
-RUN for iter in {1..10}; do \
-      yum update --setopt=tsflags=nodocs -y && \
-      yum install --setopt=tsflags=nodocs -y \
-        fontconfig freetype shadow-utils libnss3.so  && \
-      yum clean all && exit_code=0 && break || exit_code=$? && echo "yum error: retry $iter in 10s" && \
-      sleep 10; \
-    done; \
-    (exit $exit_code)
+#------------------------
 
 # Add an init process, check the checksum to make sure it's a match
 RUN curl -L -o /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64
@@ -133,7 +100,6 @@ LABEL org.label-schema.build-date="2020-12-05T02:04:38.350Z" \
   org.opencontainers.image.url="https://www.elastic.co/products/kibana" \
   org.opencontainers.image.vendor="Elastic" \
   org.opencontainers.image.version="7.10.1"
-
 # -------------------------
 
 
