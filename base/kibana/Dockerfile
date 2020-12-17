@@ -36,6 +36,9 @@ RUN set -x \
 RUN set -x \
     && cd /tmp \
     && tar -xvzf kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
+
+RUN set -x \
+    && cd /tmp \
     && mv /tmp/kibana-$KIBANA_VERSION-linux-x86_64 /opt \
 RUN set -x \
     && cd /tmp \
