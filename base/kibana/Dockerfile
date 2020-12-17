@@ -37,9 +37,15 @@ RUN set -x \
     && cd /tmp \
     && tar -xvzf kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
     && mv /tmp/kibana-$KIBANA_VERSION-linux-x86_64 /opt \
+RUN set -x \
+    && cd /tmp \
     && rm kibana-$KIBANA_VERSION-linux-x86_64.tar.gz \
+RUN set -x \
+    && cd /tmp \
     && ln -s /opt/kibana-$KIBANA_VERSION-linux-x86_64 /opt/kibana \
     && chown -R kibana:kibana /opt/kibana \
+RUN set -x \
+    && cd /tmp \
     && sed -ri "s!^(\#\s*)?(elasticsearch\.url:).*!\2 'http://elasticsearch:9200'!" /opt/kibana/config/kibana.yml \
     && grep -q 'elasticsearch:9200' /opt/kibana/config/kibana.yml
 
